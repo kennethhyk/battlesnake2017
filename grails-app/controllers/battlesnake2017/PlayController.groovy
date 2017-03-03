@@ -3,7 +3,7 @@ package battlesnake2017
 import grails.converters.JSON
 
 class PlayController {
-
+    List<Game> games
     def index() { }
 
     def start() {
@@ -24,7 +24,11 @@ class PlayController {
     }
 
     def move() {
-        Game game = new Game(gameid: 1)
-        render game as JSON
+
+         Move moveRes = new Move(
+                move:"down",
+                taunt:"hotline bling"
+        )
+        render moveRes as JSON
     }
 }
