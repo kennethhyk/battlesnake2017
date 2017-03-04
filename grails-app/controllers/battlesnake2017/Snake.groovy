@@ -9,6 +9,6 @@ class Snake {
     String name
     //String you = UUID
     int health_points
-    List<Coordinate> body
+    List<Coordinate> coords
 
 }
