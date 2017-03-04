@@ -56,4 +56,8 @@ class PlayController {
         )
         render moveRes as JSON
     }
+
+    def heatmap() {
+        return [heatmap: games[0]]
+    }
 }
