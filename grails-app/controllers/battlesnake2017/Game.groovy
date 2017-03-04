@@ -17,6 +17,8 @@ class Game {
     String next
     List<Coordinate> squareList
     Snake mySnake
+    Heatmap heatmap
+
 
 
     final List<Snake> getSnakes() {
@@ -58,7 +60,6 @@ class Game {
             }
         }
         head = mySnake.coords[0]
-        println(head)
         //todo: clear squareList once exit remove all items
         if(squareList.size() == 0){
             int ceilling = Math.ceil(mySnake.coords.size()/4)
@@ -69,7 +70,6 @@ class Game {
                 squareList = clockWise(head, ceilling)
             }
         }
-        println('squarelist:'+ squareList)
         for(int i = 0; i < squareList.size(); i++){
             if(squareList[i].x == head.x && squareList[i].y == head.y){
                 if(i == squareList.size()-1) {
@@ -88,19 +88,19 @@ class Game {
     List<Coordinate> cWise(Coordinate head,int length) {
         Coordinate ref = head
         for (int i = 1; i <= length; i++) {
-            ref = new Coordinate(x:ref.x, y:ref.y - i)
+            ref = new Coordinate(ref.x, ref.y - i)
             squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            ref = new Coordinate(x:ref.x + i, y:ref.y)
+            ref = new Coordinate(ref.x + i, ref.y)
             squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            ref = new Coordinate(x:ref.x, y:ref.y + i)
+            ref = new Coordinate(ref.x, ref.y + i)
             squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            ref = new Coordinate(x:ref.x - i, y:ref.y)
+            ref = new Coordinate(ref.x - i, ref.y)
             squareList.add(ref)
         }
 
@@ -109,19 +109,19 @@ class Game {
     List<Coordinate> clockWise(Coordinate head,int length) {
         Coordinate ref = head
         for (int i = 1; i <= length; i++) {
-            ref = new Coordinate(x:ref.x+i, y:ref.y)
+            ref = new Coordinate(ref.x+i, ref.y)
             squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            ref = new Coordinate(x:ref.x, y:ref.y-i)
+            ref = new Coordinate(ref.x, ref.y-i)
             squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            ref = new Coordinate(x:ref.x-i, y:ref.y)
+            ref = new Coordinate(ref.x-i, ref.y)
             squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            ref = new Coordinate(x:ref.x, y:ref.y+i)
+            ref = new Coordinate(ref.x, ref.y+i)
             squareList.add(ref)
         }
 

@@ -6,6 +6,13 @@ package battlesnake2017
 class Coordinate {
     int x
     int y
+    Double heat
+
+    Coordinate(int x, int y) {
+        this.x = x
+        this.y = y
+        this.heat = 0.0
+    }
 
     String toString() {
         return "("+x+ "," +y+")"

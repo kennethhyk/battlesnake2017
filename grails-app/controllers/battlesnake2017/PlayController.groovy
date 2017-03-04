@@ -11,6 +11,7 @@ class PlayController {
 //        HOW TO ACCESS REQUEST ATTRIBUTE
 
         //take in board info
+        int isExist = 0
         for(Game temp in games){
             if(temp.game_id == request.JSON.game_id as String){
                 temp.width = request.JSON.width as int
@@ -26,26 +27,35 @@ class PlayController {
                 temp.next = ""
                 temp.squareList = []
                 temp.mySnake = null
-                break
-            } else {
-                Game moves = new Game(
-                        width: request.JSON.width as int,
-                        height: request.JSON.height as int,
-                        game_id: request.JSON.game_id as String,
-                        color: "",
-                        turn: 0,
-                        you: "",
-                        snakes: [],
-                        foods: [],
-                        deadsnakes: [],
-                        state: 1,
-                        next: "",
-                        squareList: [],
-                        mySnake: null
-                )
-                games.add(moves)
+                temp.heatmap = null
+                isExist = 1
                 break
             }
+        }
+        if(!isExist) {
+            Game moves = new Game(
+                    width: request.JSON.width as int,
+                    height: request.JSON.height as int,
+                    game_id: request.JSON.game_id as String,
+                    color: "",
+                    turn: 0,
+                    you: "",
+                    snakes: [],
+                    foods: [],
+                    deadsnakes: [],
+                    state: 1,
+                    next: "",
+                    squareList: [],
+                    mySnake: null,
+                    heatmap: null
+            )
+            moves.heatmap = new Heatmap(game: moves, board: [])
+            for(int i = 0; i < moves.width;i++) {
+                for(int j = 0; j < moves.height;j++){
+                    moves.heatmap.board.add(new Coordinate(i,j))
+                }
+            }
+            games.add(moves)
         }
         Start startRes = new Start(
                 color: "#ffffff",
@@ -69,7 +79,7 @@ class PlayController {
                 for(snake in reqSnakes){
                     List<Coordinate> coords = []
                     for(coord in snake.coords) {
-                        coords.add(new Coordinate(x:coord[0] as int, y:coord[1] as int))
+                        coords.add(new Coordinate(coord[0] as int, coord[1] as int))
                     }
                     game.snakes.add(new Snake(
                             id: reqSnakes.id[0],
@@ -88,7 +98,7 @@ class PlayController {
                 }
                 List reqFoods = request.JSON.food as List
                 for(food in reqFoods){
-                    game.foods.add(new Coordinate(x:food[0], y:food[1]))
+                    game.foods.add(new Coordinate(food[0], food[1]))
                 }
                 game.deadsnakes = []
                 break
@@ -105,6 +115,15 @@ class PlayController {
     }
 
     def heatmap() {
-        return [heatmap: games[0]]
+        println(games)
+        Game game = null
+        println(params.game_id)
+        for(Game temp in games){
+            println(temp.game_id)
+            if(temp.game_id == params.game_id){
+                game = temp
+            }
+        }
+        return [heatmap: game.heatmap]
     }
 }
