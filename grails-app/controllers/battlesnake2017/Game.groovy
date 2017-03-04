@@ -16,21 +16,40 @@ class Game {
     int state
     String next
     List<Coordinate> squareList
+    Snake mySnake
 
 
     final List<Snake> getSnakes() {
         return snakes
     }
 
+    def computeState() {
+
+        if(mySnake.health_points < 35) {
+            state = 2
+        }
+
+    }
+
     def Next(){
+        //1: sleepy
         if (state == 1) {
             return Sleepy()
         }
+        //2: food
+        if (state == 2) {
+//
+        }
+        //3: escape
+        if (state == 3) {
+
+        }
     }
+
+//sleepy
     String Sleepy(){
         Coordinate head
         Coordinate nextStep
-        Snake mySnake = null
         for(Snake snake in snakes)
         {
             if(you == snake.id)
@@ -67,33 +86,43 @@ class Game {
 
 
     List<Coordinate> cWise(Coordinate head,int length) {
+        Coordinate ref = head
         for (int i = 1; i <= length; i++) {
-            squareList.add(new Coordinate(x:head.x, y:head.y - i))
+            ref = new Coordinate(x:ref.x, y:ref.y - i)
+            squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            squareList.add(new Coordinate(x:head.x + i, y:head.y))
+            ref = new Coordinate(x:ref.x + i, y:ref.y)
+            squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            squareList.add(new Coordinate(x:head.x, y:head.y + i))
+            ref = new Coordinate(x:ref.x, y:ref.y + i)
+            squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            squareList.add(new Coordinate(x:head.x - i, y:head.y))
+            ref = new Coordinate(x:ref.x - i, y:ref.y)
+            squareList.add(ref)
         }
 
         return squareList
     }
     List<Coordinate> clockWise(Coordinate head,int length) {
+        Coordinate ref = head
         for (int i = 1; i <= length; i++) {
-            squareList.add(new Coordinate(x:head.x+i, y:head.y))
+            ref = new Coordinate(x:ref.x+i, y:ref.y)
+            squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            squareList.add(new Coordinate(x:head.x, y:head.y-i))
+            ref = new Coordinate(x:ref.x, y:ref.y-i)
+            squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            squareList.add(new Coordinate(x:head.x-i, y:head.y))
+            ref = new Coordinate(x:ref.x-i, y:ref.y)
+            squareList.add(ref)
         }
         for (int i = 1; i <= length; i++) {
-            squareList.add(new Coordinate(x:head.x, y:head.y+i))
+            ref = new Coordinate(x:ref.x, y:ref.y+i)
+            squareList.add(ref)
         }
 
         return squareList

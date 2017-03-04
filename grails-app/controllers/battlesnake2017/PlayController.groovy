@@ -11,22 +11,42 @@ class PlayController {
 //        HOW TO ACCESS REQUEST ATTRIBUTE
 
         //take in board info
-
-        Game moves = new Game(
-                width: request.JSON.width as int,
-                height: request.JSON.height as int,
-                game_id: request.JSON.game_id as String,
-                color: "",
-                turn: 0,
-                you: "",
-                snakes: [],
-                foods: [],
-                deadsnakes: [],
-                state: 1,
-                next: "",
-                squareList: []
-        )
-        games.add(moves)
+        for(Game temp in games){
+            if(temp.game_id == request.JSON.game_id as String){
+                temp.width = request.JSON.width as int
+                temp.height = request.JSON.height as int
+                temp.game_id = request.JSON.game_id as String
+                temp.color = ""
+                temp.turn = 0
+                temp.you = ""
+                temp.snakes = []
+                temp.foods = []
+                temp.deadsnakes = []
+                temp.state = 1
+                temp.next = ""
+                temp.squareList = []
+                temp.mySnake = null
+                break
+            } else {
+                Game moves = new Game(
+                        width: request.JSON.width as int,
+                        height: request.JSON.height as int,
+                        game_id: request.JSON.game_id as String,
+                        color: "",
+                        turn: 0,
+                        you: "",
+                        snakes: [],
+                        foods: [],
+                        deadsnakes: [],
+                        state: 1,
+                        next: "",
+                        squareList: [],
+                        mySnake: null
+                )
+                games.add(moves)
+                break
+            }
+        }
         Start startRes = new Start(
                 color: "#ffffff",
                 head_url: "http://placecage.com/c/100/100",
@@ -45,7 +65,7 @@ class PlayController {
                 game.turn += 1
                 game.you = request.JSON.you as String
                 List reqSnakes = request.JSON.snakes as List
-                println(reqSnakes)
+//                println(request.JSON)
                 for(snake in reqSnakes){
                     List<Coordinate> coords = []
                     for(coord in snake.coords) {
@@ -59,13 +79,24 @@ class PlayController {
                             coords: coords
                     ))
                 }
-                game.foods = []
+                for(Snake snake in game.snakes)
+                {
+                    if(game.you == snake.id)
+                    {
+                        game.mySnake = snake
+                    }
+                }
+                List reqFoods = request.JSON.food as List
+                for(food in reqFoods){
+                    game.foods.add(new Coordinate(x:food[0], y:food[1]))
+                }
                 game.deadsnakes = []
                 break
             }
 
-        }
 
+        }
+        game.computeState()
         Move moveRes = new Move(
                 move: game.Next(),
                 taunt:"hotlinebling"
