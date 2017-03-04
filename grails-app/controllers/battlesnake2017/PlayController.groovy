@@ -3,25 +3,22 @@ package battlesnake2017
 import grails.converters.JSON
 
 class PlayController {
-    List<Game> games
+    List<Game> games = []
 
     def index() { }
 
     def start() {
 //        HOW TO ACCESS REQUEST ATTRIBUTE
-        println(params.width)
-        println(params.height)
-        println(params.game_id)
 
         //take in board info
 
         Game moves = new Game(
-                width: params.width as int,
-                height: params.height as int,
-                game_id: params.game_id as String,
+                width: request.JSON.width as int,
+                height: request.JSON.height as int,
+                game_id: request.JSON.game_id as String,
                 color: "",
                 turn: 0,
-                you: UUID,
+                you: UUID as String,
                 snakes: [],
                 foods: [],
                 deadsnakes: [],
