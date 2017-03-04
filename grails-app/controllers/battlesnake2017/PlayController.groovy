@@ -18,7 +18,7 @@ class PlayController {
                 game_id: request.JSON.game_id as String,
                 color: "",
                 turn: 0,
-                you: UUID as String,
+                you: "",
                 snakes: [],
                 foods: [],
                 deadsnakes: [],
@@ -37,22 +37,37 @@ class PlayController {
     }
 
     def move() {
-
-        Game game1 = null
-        for(Game game in games){
-            println(game.game_id)
-            println(params.game_id)
-            if(game.game_id == params.game_id){
-                game1 = game
-//                println(game.game_id)
-//                println(params.game_id)
+        Game game = null
+        for(Game temp in games){
+            if(temp.game_id == request.JSON.game_id as String){
+                game = temp
+                game.color = ""
+                game.turn += 1
+                game.you = request.JSON.you as String
+                List reqSnakes = request.JSON.snakes as List
+                println(reqSnakes)
+                for(snake in reqSnakes){
+                    List<Coordinate> coords = []
+                    for(coord in snake.coords) {
+                        coords.add(new Coordinate(x:coord[0] as int, y:coord[1] as int))
+                    }
+                    game.snakes.add(new Snake(
+                            id: reqSnakes.id[0],
+                            taunt: reqSnakes.taunt[0],
+                            name: reqSnakes.name[0],
+                            health_points: reqSnakes.health_points[0] as int,
+                            coords: coords
+                    ))
+                }
+                game.foods = []
+                game.deadsnakes = []
                 break
             }
 
         }
 
         Move moveRes = new Move(
-                move: game1.Next(),
+                move: game.Next(),
                 taunt:"hotlinebling"
         )
         render moveRes as JSON

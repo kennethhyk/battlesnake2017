@@ -38,17 +38,19 @@ class Game {
                 mySnake = snake
             }
         }
-        head = mySnake.body[0]
+        head = mySnake.coords[0]
+        println(head)
         //todo: clear squareList once exit remove all items
         if(squareList.size() == 0){
-            int ceilling = Math.ceil(mySnake.body.size()/4)
-            if(mySnake.body[1].x > head.x){
+            int ceilling = Math.ceil(mySnake.coords.size()/4)
+            if(mySnake.coords[1].x > head.x){
                 squareList = cWise(head,ceilling)
 
             }else{
                 squareList = clockWise(head, ceilling)
             }
         }
+        println('squarelist:'+ squareList)
         for(int i = 0; i < squareList.size(); i++){
             if(squareList[i].x == head.x && squareList[i].y == head.y){
                 if(i == squareList.size()-1) {
@@ -65,35 +67,33 @@ class Game {
 
 
     List<Coordinate> cWise(Coordinate head,int length) {
-        squareList.add(head)
-        for (int i = 0; i < length; i++) {
-            squareList.add(new Coordinate(x:head.x, y:head.y - 1))
+        for (int i = 1; i <= length; i++) {
+            squareList.add(new Coordinate(x:head.x, y:head.y - i))
         }
-        for (int i = 0; i < length; i++) {
-            squareList.add(new Coordinate(x:head.x + 1, y:head.y))
+        for (int i = 1; i <= length; i++) {
+            squareList.add(new Coordinate(x:head.x + i, y:head.y))
         }
-        for (int i = 0; i < length; i++) {
-            squareList.add(new Coordinate(x:head.x, y:head.y + 1))
+        for (int i = 1; i <= length; i++) {
+            squareList.add(new Coordinate(x:head.x, y:head.y + i))
         }
-        for (int i = 0; i < length; i++) {
-            squareList.add(new Coordinate(x:head.x - 1, y:head.y))
+        for (int i = 1; i <= length; i++) {
+            squareList.add(new Coordinate(x:head.x - i, y:head.y))
         }
 
         return squareList
     }
     List<Coordinate> clockWise(Coordinate head,int length) {
-        squareList.add(head)
-        for (int i = 0; i < length; i++) {
-            squareList.add(new Coordinate(x:head.x+1, y:head.y))
+        for (int i = 1; i <= length; i++) {
+            squareList.add(new Coordinate(x:head.x+i, y:head.y))
         }
-        for (int i = 0; i < length; i++) {
-            squareList.add(new Coordinate(x:head.x, y:head.y-1))
+        for (int i = 1; i <= length; i++) {
+            squareList.add(new Coordinate(x:head.x, y:head.y-i))
         }
-        for (int i = 0; i < length; i++) {
-            squareList.add(new Coordinate(x:head.x-1, y:head.y))
+        for (int i = 1; i <= length; i++) {
+            squareList.add(new Coordinate(x:head.x-i, y:head.y))
         }
-        for (int i = 0; i < length; i++) {
-            squareList.add(new Coordinate(x:head.x, y:head.y+1))
+        for (int i = 1; i <= length; i++) {
+            squareList.add(new Coordinate(x:head.x, y:head.y+i))
         }
 
         return squareList
