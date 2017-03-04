@@ -22,4 +22,19 @@ class Coordinate {
         //TODO: board
         return true
     }
+
+    String directionTo(Coordinate coords) {
+        if(coords.x == x && coords.y == y-1){
+            return "up"
+        }
+        if(coords.x == x && coords.y == y+1){
+            return "down"
+        }
+        if(coords.x == x-1 && coords.y == y){
+            return "left"
+        }
+        if(coords.x == x+1 && coords.y == y){
+            return "right"
+        }
+    }
 }

@@ -15,22 +15,7 @@ class Game {
     List<Snake> deadsnakes
     int state
     String next
-
-//    Game(int width, int height, String id){
-//        this.width = width
-//        this.height = height
-//        this.game_id = id
-//        this.color = ""
-//        this.turn = 0
-//        this.you = UUID
-//        this.snakes = []
-//        this.foods = []
-//        this.deadsnakes = []
-//        this.state = 1
-//        this.next = ""
-//
-//    }
-
+    List<Coordinate> squareList
 
 
     final List<Snake> getSnakes() {
@@ -38,42 +23,81 @@ class Game {
     }
 
     def Next(){
-        if(state == 1){
-           return Sleepy()
+        if (state == 1) {
+            return Sleepy()
         }
     }
-
     String Sleepy(){
+        Coordinate head
+        Coordinate nextStep
+        Snake mySnake = null
         for(Snake snake in snakes)
         {
             if(you == snake.id)
             {
-                Coordinate head = new Coordinate()
-                head = snake.body[0]
-                for(int i=1;i <= snake.body.length;i++){
-                    Coordinate body = new Coordinate()
-                    body = snake.body[i]
-                    if(snake.body.length  ){}
-                        if(head.x < body.x && head.y == body.y){
-                            this.next = "up"
-                            return next
-                        }else if(head.x > body.x && head.y == body.y){
-                            this.next = "down"
-                            return next
-
-                        }else if(head.x == body.x && head.y < body.y){
-                            this.next = "left"
-                            return next
-                        }else if(head.x == body.x && head.y > body.y){
-                            this.next = "right"
-                            return next
-                        }
-                }
+                mySnake = snake
             }
-
         }
-        this.next = "down"
-        return next
+        head = mySnake.body[0]
+        //todo: clear squareList once exit remove all items
+        if(squareList.size() == 0){
+            int ceilling = Math.ceil(mySnake.body.size()/4)
+            if(mySnake.body[1].x > head.x){
+                squareList = cWise(head,ceilling)
+
+            }else{
+                squareList = clockWise(head, ceilling)
+            }
+        }
+        for(int i = 0; i < squareList.size(); i++){
+            if(squareList[i].x == head.x && squareList[i].y == head.y){
+                if(i == squareList.size()-1) {
+                    nextStep = squareList[0]
+                    break
+                }
+                nextStep = squareList[i+1]
+                break
+            }
+        }
+        return head.directionTo(nextStep)
     }
 
+
+
+    List<Coordinate> cWise(Coordinate head,int length) {
+        squareList.add(head)
+        for (int i = 0; i < length; i++) {
+            squareList.add(new Coordinate(x:head.x, y:head.y - 1))
+        }
+        for (int i = 0; i < length; i++) {
+            squareList.add(new Coordinate(x:head.x + 1, y:head.y))
+        }
+        for (int i = 0; i < length; i++) {
+            squareList.add(new Coordinate(x:head.x, y:head.y + 1))
+        }
+        for (int i = 0; i < length; i++) {
+            squareList.add(new Coordinate(x:head.x - 1, y:head.y))
+        }
+
+        return squareList
+    }
+    List<Coordinate> clockWise(Coordinate head,int length) {
+        squareList.add(head)
+        for (int i = 0; i < length; i++) {
+            squareList.add(new Coordinate(x:head.x+1, y:head.y))
+        }
+        for (int i = 0; i < length; i++) {
+            squareList.add(new Coordinate(x:head.x, y:head.y-1))
+        }
+        for (int i = 0; i < length; i++) {
+            squareList.add(new Coordinate(x:head.x-1, y:head.y))
+        }
+        for (int i = 0; i < length; i++) {
+            squareList.add(new Coordinate(x:head.x, y:head.y+1))
+        }
+
+        return squareList
+    }
 }
+
+

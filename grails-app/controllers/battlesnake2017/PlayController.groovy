@@ -23,7 +23,8 @@ class PlayController {
                 foods: [],
                 deadsnakes: [],
                 state: 1,
-                next: ""
+                next: "",
+                squareList: []
         )
         games.add(moves)
         Start startRes = new Start(
