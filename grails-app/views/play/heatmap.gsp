@@ -15,11 +15,15 @@
 </head>
 
 <body>
-    <g:each var="i" in="${ (0..<(heatmap.game.width as int)-1) }">
-        <g:each var="j" in="${ (0..<(heatmap.game.height as int)-1) }">
-            <div class="block" data-heat="${heatmap.board[(i+1)*(j+1)-1]}"></div>
+    <div class="bg">
+        <g:each var="i" in="${ (0..<(heatmap.game.width as int)) }">
+            <g:each var="j" in="${ (0..<(heatmap.game.height as int)) }">
+                <div class="divbg">
+                    <div class="block" data-heat="${heatmap.board[j*(heatmap.game.width as int)+i].heat}"></div>
+                </div>
+            </g:each>
+            <br>
         </g:each>
-        <br>
-    </g:each>
+    </div>
 </body>
 </html>

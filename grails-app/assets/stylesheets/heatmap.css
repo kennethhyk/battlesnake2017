@@ -3,7 +3,16 @@ html {
   height: 100%;
   width: 100%; }
 
+.bg {
+  background-color: #294785; }
+
 .block {
+  display: inline-block;
+  width: 50px;
+  height: 40px;
+  background-color: #f2f2f2; }
+
+.divbg {
   display: inline-block;
   width: 50px;
   height: 40px;

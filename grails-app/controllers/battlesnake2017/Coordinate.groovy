@@ -11,26 +11,11 @@ class Coordinate {
     Coordinate(int x, int y) {
         this.x = x
         this.y = y
-        this.heat = 0.0
+        this.heat = 0.5
     }
 
     String toString() {
         return "("+x+ "," +y+")"
-    }
-
-    boolean isSafe(int x,int y){
-        Game lizheng = new Game()
-        List<Snake> snakes = lizheng.getSnakes()
-        for(Snake snake in snakes){
-            for(Coordinate coordinate in snake.coords) {
-                if (x == coordinate.x && y == coordinate.y) {
-                    return false
-                }
-            }
-
-        }
-        //TODO: board
-        return true
     }
 
     String directionTo(Coordinate coords) {

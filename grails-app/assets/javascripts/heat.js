@@ -7,11 +7,13 @@ $(document).ready(function() {
         if(heat < 0.5 ) {
             //cold
             heat = 1-(heat/0.5);
-            $(this).css('background-color', 'rgba(0,0,255,'+heat+')');
+            $(this).css('background-color', 'rgb(0,0,255)');
+            $(this).css('opacity', heat);
         } else {
             //hot
             heat = (heat-0.5)/0.5;
-            $(this).css('background-color', 'rgba(255,0,0,'+heat+')');
+            $(this).css('background-color', 'rgb(255,0,0)');
+            $(this).css('opacity', heat);
         }
     })
 });

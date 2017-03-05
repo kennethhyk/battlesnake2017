@@ -3,6 +3,8 @@ package battlesnake2017
 import grails.converters.JSON
 
 class PlayController {
+    static scope = "singleton"
+
     List<Game> games = []
 
     def index() { }
@@ -27,8 +29,14 @@ class PlayController {
                 temp.next = ""
                 temp.squareList = []
                 temp.mySnake = null
-                temp.heatmap = null
+                temp.heatmap = []
                 isExist = 1
+                temp.heatmap = new Heatmap(game: temp, board: [])
+                for(int i = 0; i < temp.width;i++) {
+                    for(int j = 0; j < temp.height;j++){
+                        temp.heatmap.board.add(new Coordinate(i,j))
+                    }
+                }
                 break
             }
         }
@@ -47,7 +55,7 @@ class PlayController {
                     next: "",
                     squareList: [],
                     mySnake: null,
-                    heatmap: null
+                    heatmap: []
             )
             moves.heatmap = new Heatmap(game: moves, board: [])
             for(int i = 0; i < moves.width;i++) {
@@ -74,8 +82,8 @@ class PlayController {
                 game.color = ""
                 game.turn += 1
                 game.you = request.JSON.you as String
+                game.snakes = []
                 List reqSnakes = request.JSON.snakes as List
-//                println(request.JSON)
                 for(snake in reqSnakes){
                     List<Coordinate> coords = []
                     for(coord in snake.coords) {
@@ -96,6 +104,7 @@ class PlayController {
                         game.mySnake = snake
                     }
                 }
+                game.foods = []
                 List reqFoods = request.JSON.food as List
                 for(food in reqFoods){
                     game.foods.add(new Coordinate(food[0], food[1]))
@@ -106,6 +115,35 @@ class PlayController {
 
 
         }
+        for(Coordinate coords in game.heatmap.board) {
+            coords.heat = 0.5
+        }
+        for(Coordinate food in game.foods) {
+            Coordinate coords = game.heatmap.board.find { it.x == food.x && it.y == food.y }
+            if(coords) {
+                coords.heat = coords.heat - 0.3
+            }
+        }
+        for(Snake snakeBody in game.snakes) {
+            for(Coordinate coords in snakeBody.coords){
+                Coordinate c = game.heatmap.board.find { it.x == coords.x && it.y == coords.y }
+                if(c) {
+                    c.heat = c.heat + 0.3
+                }
+            }
+        }
+//        for(Coordinate coords in game.heatmap.board) {
+//            //food
+//            if(game.radiation(game.foods).find{it.x == coords.x && it.y == coords.y}){
+//                coords.heat -= 0.1
+//            }
+            //snake
+//            for(Snake s in game.snakes) {
+//                if(game.radiation(s.coords).find{it.x == coords.x && it.y == coords.y}){
+//                    coords.heat += 0.2
+//                }
+//            }
+//        }
         game.computeState()
         Move moveRes = new Move(
                 move: game.Next(),
@@ -115,11 +153,8 @@ class PlayController {
     }
 
     def heatmap() {
-        println(games)
         Game game = null
-        println(params.game_id)
         for(Game temp in games){
-            println(temp.game_id)
             if(temp.game_id == params.game_id){
                 game = temp
             }

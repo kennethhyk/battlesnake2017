@@ -27,9 +27,7 @@ class Game {
 
     def computeState() {
 
-        if(mySnake.health_points < 35) {
             state = 2
-        }
 
     }
 
@@ -40,12 +38,49 @@ class Game {
         }
         //2: food
         if (state == 2) {
-//
+          return findFood()
         }
         //3: escape
         if (state == 3) {
 
         }
+    }
+//findFood
+    String findFood() {
+        Coordinate head
+        Coordinate nextStep
+        for(Snake snake in snakes)
+        {
+            if(you == snake.id)
+            {
+                mySnake = snake
+            }
+        }
+        head = mySnake.coords[0]
+        nextStep = new Coordinate(head.x, head.y)
+        Coordinate food = foods.first()
+        println(food.x)
+        println(head.x)
+        if(food.x > head.x) {
+            nextStep.x = nextStep.x + 1
+            return head.directionTo(nextStep)
+        }
+        if(food.x < head.x) {
+            if(food.y > head.y) {
+                nextStep.y = nextStep.y + 1
+                return head.directionTo(nextStep)
+            }
+        }
+        if(food.y > head.y) {
+            nextStep.y = nextStep.y + 1
+            return head.directionTo(nextStep)
+        }
+        if(food.y < head.y) {
+            nextStep.y = nextStep.y - 1
+            return head.directionTo(nextStep)
+        }
+
+        return head.directionTo(nextStep)
     }
 
 //sleepy
@@ -61,7 +96,7 @@ class Game {
         }
         head = mySnake.coords[0]
         //todo: clear squareList once exit remove all items
-        if(squareList.size() == 0){
+        if(squareList.size() == 0) {
             int ceilling = Math.ceil(mySnake.coords.size()/4)
             if(mySnake.coords[1].x > head.x){
                 squareList = cWise(head,ceilling)
@@ -80,10 +115,38 @@ class Game {
                 break
             }
         }
+//        if(isSafe(nextStep.x, nextStep.y)) {
+//        }
         return head.directionTo(nextStep)
+//        else {
+//            if(isSafe(head.x, head.y-1)){
+//                return head.directionTo(new Coordinate(head.x, head.y-1))
+//            }
+//            if(isSafe(head.x, head.y+1)){
+//                return head.directionTo(new Coordinate(head.x, head.y+1))
+//            }
+//            if(isSafe(head.x-1, head.y)){
+//                return head.directionTo(new Coordinate(head.x-1, head.y))
+//            }
+//            if(isSafe(head.x+1, head.y)){
+//                return head.directionTo(new Coordinate(head.x+1, head.y))
+//            }
+//        }
     }
 
-
+    boolean isSafe(int x,int y){
+        for(Snake snake in snakes){
+            for(Coordinate coordinate in snake.coords) {
+                if (x == coordinate.x && y == coordinate.y) {
+                    return false
+                }
+            }
+        }
+        if(x == width-1 || y == height-1 || x == -1 || y == -1) {
+            return false
+        }
+        return true
+    }
 
     List<Coordinate> cWise(Coordinate head,int length) {
         Coordinate ref = head
@@ -126,6 +189,25 @@ class Game {
         }
 
         return squareList
+    }
+
+    List<Coordinate> radiation(List<Coordinate> list) {
+        List<Coordinate> coordinateList = []
+        for(Coordinate coords in list){
+            if(list.find{it.x == coords.x && it.y == coords.y-1}){
+                coordinateList.add(new Coordinate(coords.x, coords.y-1))
+            }
+            if(list.find{it.x == coords.x && it.y == coords.y+1}){
+                coordinateList.add(new Coordinate(coords.x, coords.y+1))
+            }
+            if(list.find{it.x == coords.x-1 && it.y == coords.y}){
+                coordinateList.add(new Coordinate(coords.x-1, coords.y))
+            }
+            if(list.find{it.x == coords.x+1 && it.y == coords.y}){
+                coordinateList.add(new Coordinate(coords.x+1, coords.y))
+            }
+        }
+        return coordinateList
     }
 }
 
